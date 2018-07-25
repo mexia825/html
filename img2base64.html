@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <style type="text/css">
+      div {
+        text-align: center;
+      }
+      p {
+        word-break: break-all;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <p id="url"></p>
+    <img id="img" />
+  </body>
+</html>
+<script>
+  var img = "https://img-ucdn-static.helijia.com/lego/uploads/user/images/original_16b647486bea5215910c1fd8ea5478eb.png";
+
+  function getBase64Image(img) {
+      var canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, img.width, img.height);
+      var ext = img.src.substring(img.src.lastIndexOf(".")+1).toLowerCase();
+      var dataURL = canvas.toDataURL("image/"+ext);
+      return dataURL;
+  }
+
+  var image = new Image();
+  image.crossOrigin = '';
+  image.src = img;
+  document.body.prepend(image);
+
+  image.onload = function(){
+    base64 = getBase64Image(image);
+    document.getElementById('url').innerText = base64;
+
+    var $img = document.getElementById('img');
+    $img.src = base64;
+    $img.onclick = download.bind(this, base64);
+  }
+
+  function download(base64){
+      var dlLink = document.createElement("a");
+          dlLink.id='dlLink';
+          dlLink.download = '文件名'; 
+          document.body.appendChild(dlLink);
+      dlLink.href = base64;
+      dlLink.click();
+  }
+
+
+</script>
